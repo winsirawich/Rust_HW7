@@ -1,0 +1,332 @@
+use std::cmp::Ordering;
+
+// // Q1.1)
+// fn main() {
+//     let mut num = vec![4, 1, 6, 3, 9];
+//     num.sort_by(|a, b| a.cmp(b));
+//     println!("Ascending order: {:?}", num);
+
+//     num.sort_by(|a, b| b.cmp(a));
+//     println!("Descending order: {:?}", num);
+// }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+
+//     #[test]
+//     fn test_sorting_ascending() {
+//         let mut num = vec![4, 1, 6, 3, 9];
+//         num.sort_by(|a, b| a.cmp(b));
+//         assert_eq!(num, vec![1, 3, 4, 6, 9]);
+//     }
+
+//     #[test]
+//     fn test_sorting_descending() {
+//         let mut num = vec![4, 1, 6, 3, 9];
+//         num.sort_by(|a, b| b.cmp(a));
+//         assert_eq!(num, vec![9, 6, 4, 3, 1]);
+//     }
+// }
+// Q1.2)
+// use std::io;
+
+// fn bubble_sort(arr: &mut Vec<i32>) {
+//     let len = arr.len();
+//     for i in 0..len {
+//         for j in 0..len - i - 1 {
+//             if arr[j] > arr[j + 1] {
+//                 // Swap arr[j] and arr[j+1]
+//                 let temp = arr[j];
+//                 arr[j] = arr[j + 1];
+//                 arr[j + 1] = temp;
+//             }
+//         }
+//     }
+// }
+
+// fn main() {
+//     let mut num = Vec::new();
+
+//     // Read input from the user and populate the vector
+//     loop {
+//         let mut input = String::new();
+
+//         println!("Enter a number (or 'done' to finish): ");
+
+//         io::stdin()
+//             .read_line(&mut input)
+//             .expect("Failed to read line");
+
+//         input = input.trim().to_string();
+
+//         if input == "done" {
+//             break;
+//         }
+
+//         let num_input: Result<i32, _> = input.parse();
+//         match num_input {
+//             Ok(n) => num.push(n),
+//             Err(_) => println!("Invalid input. Please enter a valid number."),
+//         }
+//     }
+
+//     if num.is_empty() {
+//         println!("The vector is empty.");
+//         return;
+//     }
+
+//     bubble_sort(&mut num);
+//     println!("Sorted in ascending order: {:?}", num);
+
+//     // Sorting in descending order by reversing the vector
+//     num.reverse();
+//     println!("Sorted in descending order: {:?}", num);
+// }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+
+//     #[test]
+//     fn test_bubble_sort() {
+//         let mut num = vec![4, 1, 6, 3, 9];
+//         bubble_sort(&mut num);
+//         assert_eq!(num, vec![1, 3, 4, 6, 9]);
+//     }
+// }
+
+
+
+// Q2.1
+// use std::env;
+// use std::fmt;
+// use std::str::FromStr;
+
+// #[derive(Debug, PartialEq, PartialOrd, Clone, Copy)]
+// struct Point {
+//     x: f64,
+//     y: f64,
+// }
+
+// impl FromStr for Point {
+//     type Err = &'static str;
+
+//     fn from_str(s: &str) -> Result<Self, Self::Err> {
+//         let parts: Vec<&str> = s.split(',').collect();
+//         if parts.len() != 2 {
+//             return Err("Invalid input format. Please use 'x,y' format.");
+//         }
+
+//         let x_str = parts[0].trim();
+//         let y_str = parts[1].trim();
+
+//         let x = x_str.parse::<f64>().map_err(|_| "Invalid x-coordinate")?;
+//         let y = y_str.parse::<f64>().map_err(|_| "Invalid y-coordinate")?;
+
+//         Ok(Point { x, y })
+//     }
+// }
+
+// impl fmt::Display for Point {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         write!(f, "({}, {})", self.x, self.y)
+//     }
+// }
+
+// fn main() {
+//     let args: Vec<String> = env::args().collect();
+
+//     if args.len() <= 1 {
+//         println!("Usage: {} <point1> <point2> ...", args[0]);
+//         return;
+//     }
+
+//     let mut points: Vec<Point> = args[1..]
+//         .iter()
+//         .filter_map(|arg| arg.parse().ok())
+//         .collect();
+
+//     if points.len() < 2 {
+//         println!("At least two valid points are required.");
+//         return;
+//     }
+
+//     points.sort_by(|a, b| a.x.partial_cmp(&b.x).unwrap().then_with(|| a.y.partial_cmp(&b.y).unwrap()));
+
+//     println!("Sorted by x and y in ascending order: {:?}", points);
+    
+//     points.sort_by(|a, b| b.x.partial_cmp(&a.x).unwrap().then_with(|| b.y.partial_cmp(&a.y).unwrap()));
+
+//     println!("Sorted by x and y in descending order: {:?}", points);
+// }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+
+//     #[test]
+//     fn test_point_from_str() {
+//         assert_eq!("5.0,2.0".parse::<Point>(), Ok(Point { x: 5.0, y: 2.0 }));
+//         assert_eq!("invalid".parse::<Point>(), Err("Invalid input format. Please use 'x,y' format."));
+//     }
+// }
+// // Q2.2)
+// use std::env;
+// use std::fmt;
+// use std::str::FromStr;
+
+// #[derive(Debug, PartialEq, PartialOrd, Clone, Copy)]
+// struct Point {
+//     x: f64,
+//     y: f64,
+// }
+
+// impl FromStr for Point {
+//     type Err = &'static str;
+
+//     fn from_str(s: &str) -> Result<Self, Self::Err> {
+//         let parts: Vec<&str> = s.split(',').collect();
+//         if parts.len() != 2 {
+//             return Err("Invalid input format. Please use 'x,y' format.");
+//         }
+
+//         let x_str = parts[0].trim();
+//         let y_str = parts[1].trim();
+
+//         let x = x_str.parse::<f64>().map_err(|_| "Invalid x-coordinate")?;
+//         let y = y_str.parse::<f64>().map_err(|_| "Invalid y-coordinate")?;
+
+//         Ok(Point { x, y })
+//     }
+// }
+
+// impl fmt::Display for Point {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         write!(f, "({}, {})", self.x, self.y)
+//     }
+// }
+
+// fn bubble_sort(points: &mut Vec<Point>) {
+//     let len = points.len();
+//     for i in 0..len {
+//         for j in 0..len - i - 1 {
+//             if points[j].x > points[j + 1].x || (points[j].x == points[j + 1].x && points[j].y > points[j + 1].y) {
+//                 points.swap(j, j + 1);
+//             }
+//         }
+//     }
+// }
+
+// fn main() {
+//     let args: Vec<String> = env::args().collect();
+
+//     if args.len() <= 1 {
+//         println!("Usage: {} <point1> <point2> ...", args[0]);
+//         return;
+//     }
+
+//     let mut points: Vec<Point> = args[1..]
+//         .iter()
+//         .filter_map(|arg| arg.parse().ok())
+//         .collect();
+
+//     if points.len() < 2 {
+//         println!("At least two valid points are required.");
+//         return;
+//     }
+
+//     bubble_sort(&mut points);
+
+//     println!("Sorted by x and y in ascending order: {:?}", points);
+
+//     // Sort points by x then y in descending order
+//     points.reverse();
+
+//     println!("Sorted by x and y in descending order: {:?}", points);
+// }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+
+//     #[test]
+//     fn test_point_from_str() {
+//         assert_eq!("5.0,2.0".parse::<Point>(), Ok(Point { x: 5.0, y: 2.0 }));
+//         assert_eq!("invalid".parse::<Point>(), Err("Invalid input format. Please use 'x,y' format."));
+//     }
+// }
+
+
+
+// Q3.1)
+// fn main() {
+//     let input: Vec<String> = std::env::args().collect();
+
+//     if input.len() < 4 {
+//         eprintln!("Usage: {} <start> <end> <step>", input[0]);
+//         return;
+//     }
+//     let start = input[1].parse::<i64>().expect("Invalid start value");
+//     let end = input[2].parse::<i64>().expect("Invalid end value");
+//     let step = input[3].parse::<i64>().expect("Invalid step value");
+//     println!(
+//         "<style>table, td {{ border: 1px solid #000000; border-collapse: collapse; }}</style>"
+//     );
+//     println!("<table>");
+//     println!("<tr><th>Fahrenheit</th><th>Celsius</th></tr>");
+
+//     for fahrenheit in (start..=end).step_by(step as usize) {
+//         let celsius = (5.0 / 9.0) * (fahrenheit as f64 - 32.0);
+//         println!("<tr><td>{}</td><td>{:.2}</td></tr>", fahrenheit, celsius);
+//     }
+//     println!("</table>");
+// }
+
+fn main() {
+    let input: Vec<String> = std::env::args().collect();
+
+    if input.len() < 4 {
+        eprintln!("Usage: {} <start> <end> <step>", input[0]);
+        return;
+    }
+    let start = input[1].parse::<i64>().expect("Invalid start value");
+    let end = input[2].parse::<i64>().expect("Invalid end value");
+    let step = input[3].parse::<i64>().expect("Invalid step value");
+
+    println!(
+        "<style>table, td {{ border: 1px solid #000000; border-collapse: collapse; }}</style>"
+    );
+    println!("<table>");
+    println!("<tr><th>x</th><th>x^2</th><th>x^3</th></tr>");
+
+    for x in (start..=end).step_by(step as usize) {
+        let x_squared = x * x;
+        let x_cubed = x * x * x;
+        println!("<tr><td>{}</td><td>{}</td><td>{}</td></tr>", x, x_squared, x_cubed);
+    }
+    println!("</table>");
+}
+
+// fn main() {
+//     let input: Vec<String> = std::env::args().collect();
+
+//     if input.len() < 4 {
+//         eprintln!("Usage: {} <start> <end> <step>", input[0]);
+//         return;
+//     }
+//     let start = input[1].parse::<i64>().expect("Invalid start value");
+//     let end = input[2].parse::<i64>().expect("Invalid end value");
+//     let step = input[3].parse::<i64>().expect("Invalid step value");
+//     println!(
+//         "<style>table, td {{ border: 1px solid #000000; border-collapse: collapse; }}</style>"
+//     );
+//     println!("<table>");
+//     println!("<tr><th>Fahrenheit</th><th>Celsius</th></tr>");
+
+//     for fahrenheit in (start..=end).step_by(step as usize) {
+//         let celsius = (5.0 / 9.0) * (fahrenheit as f64 - 32.0);
+//         println!("<tr><td>{}</td><td>{:.2}</td></tr>", fahrenheit, celsius);
+//     }
+//     println!("</table>");
+// }
